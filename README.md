@@ -8,7 +8,7 @@ A Python rewrite of a Spring Boot currency rates API, designed for minimal AWS L
 Client
   └─► CloudFront (5-minute edge cache, 24-hour stale-if-error)
         └─► API Gateway (HTTP API v2)
-              └─► Lambda (Python 3.13)
+              └─► Lambda (Python 3.14)
                     └─► allratestoday.com /api/v1/rates
 ```
 
@@ -18,7 +18,7 @@ On upstream failure the Lambda returns the last successfully fetched rates from 
 
 | Concern | Approach |
 |---|---|
-| Runtime | Python 3.13, no web framework — direct API Gateway HTTP API v2 event handling |
+| Runtime | Python 3.14, no web framework — direct API Gateway HTTP API v2 event handling |
 | HTTP client | `requests` (the only runtime dependency) |
 | Cold start | Module-level singletons initialized once per container; warm invocations skip all initialization |
 | In-memory cache | Thread-safe (`threading.Lock`) `RatesCache`; holds the last successful upstream response for stale-fallback |
@@ -123,7 +123,7 @@ Error responses conform to [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) (P
 
 ### Prerequisites
 
-- Python 3.13+
+- Python 3.14+
 - pip
 
 ### Install
@@ -210,7 +210,7 @@ cd package && zip -r ../function.zip . && cd ..
 ```bash
 aws lambda create-function \
   --function-name currency-service \
-  --runtime python3.13 \
+  --runtime python3.14 \
   --handler handler.lambda_handler \
   --zip-file fileb://function.zip \
   --role arn:aws:iam::<account-id>:role/<execution-role> \
@@ -223,7 +223,7 @@ aws lambda create-function \
 
 | Setting | Value | Reason |
 |---|---|---|
-| Runtime | `python3.13` | Matches development environment |
+| Runtime | `python3.14` | Matches development environment |
 | Handler | `handler.lambda_handler` | Entry point |
 | Memory | 256 MB | Sufficient; increase if cold starts are slow |
 | Timeout | 30 s | Upstream request timeout is 29 s |
