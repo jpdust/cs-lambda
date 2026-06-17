@@ -33,8 +33,11 @@ jobs:
           allow-prereleases: true
 
       # ── Dependencies ─────────────────────────────────────────────────────────
+      # --only-binary :all: prevents execution of setup.py build scripts.
+      # --require-hashes enforces the pinned hashes in the lock file,
+      # ensuring reproducible installs and guarding against supply-chain attacks.
       - name: Install dependencies
-        run: pip install -r requirements-dev.txt
+        run: "pip install --only-binary :all: --require-hashes -r requirements-dev.lock"
 
       # ── Tests & Coverage ─────────────────────────────────────────────────────
       # pytest-cov writes coverage.xml (configured in pyproject.toml).
