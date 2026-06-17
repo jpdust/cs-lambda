@@ -3,10 +3,11 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "--cov=src --cov=handler --cov-report=term-missing --cov-report=xml -v"
+addopts = "--cov=. --cov-report=term-missing --cov-report=xml -v"
 
 [tool.coverage.run]
-source = ["src", "handler"]
+source = ["."]
+omit = ["tests/*", ".venv/*"]
 relative_files = true
 
 [tool.coverage.report]
