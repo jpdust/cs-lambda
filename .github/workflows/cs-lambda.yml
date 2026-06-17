@@ -42,7 +42,7 @@ jobs:
       # pytest-cov writes coverage.xml (configured in pyproject.toml).
       # The XML report is consumed by the SonarCloud step below.
       - name: Run tests
-        run: uv run --no-build pytest
+        run: .venv/bin/pytest
 
       - name: Upload coverage report on failure
         if: failure()
