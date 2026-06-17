@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Test & coverage artifacts
+.coverage
+coverage.xml
+
+# Lambda deployment artifacts
+package/
+function.zip
