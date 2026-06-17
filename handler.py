@@ -58,7 +58,7 @@ def _handle_get_rates(service: CurrencyService, cache_control: str) -> dict:
         return {"statusCode": 200, "headers": headers, "body": json.dumps(body)}
 
     except ExternalApiException as ex:
-        log.error("Upstream currency API error (HTTP %s): %s", ex.status_code, ex)
+        log.exception("Upstream currency API error (HTTP %s): %s", ex.status_code, ex)
         return _problem_response(
             "urn:currency-service:upstream-error",
             "Upstream API Error",
@@ -66,7 +66,7 @@ def _handle_get_rates(service: CurrencyService, cache_control: str) -> dict:
         )
 
     except NetworkException as ex:
-        log.error("Network error reaching currency API: %s", ex)
+        log.exception("Network error reaching currency API: %s", ex)
         return _problem_response(
             "urn:currency-service:network-error",
             "Upstream Unreachable",
