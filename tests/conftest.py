@@ -4,7 +4,7 @@ from src.config import Config
 from src.rates_cache import RatesCache
 from src.currency_service import CurrencyService
 
-UPSTREAM_BASE = "http://test-upstream.local"
+UPSTREAM_BASE = "https://test-upstream.local"
 UPSTREAM_PATH = "/api/v1/rates"
 UPSTREAM_URL = f"{UPSTREAM_BASE}{UPSTREAM_PATH}"
 TEST_API_KEY = "test-key"
