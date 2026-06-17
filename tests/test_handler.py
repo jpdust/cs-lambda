@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 import pytest
 
 from handler import _handle_get_rates
-from src.exceptions import ExternalApiException
+from src.exceptions import ExternalApiException, NetworkException
 from src.models import CurrencyRatesResponse, RatesFetchResult
 from tests.conftest import make_event
 
@@ -72,6 +72,17 @@ def test_get_rates_returns_503_when_upstream_fails_and_cache_empty():
     result = _handle_get_rates(svc, CACHE_CONTROL)
 
     assert result["statusCode"] == 503
+
+
+def test_get_rates_returns_503_when_network_error():
+    svc = MagicMock()
+    svc.fetch_rates.side_effect = NetworkException("Connection refused")
+
+    result = _handle_get_rates(svc, CACHE_CONTROL)
+
+    assert result["statusCode"] == 503
+    body = json.loads(result["body"])
+    assert body["type"] == "urn:currency-service:network-error"
 
 
 def test_lambda_handler_routes_get_api_rates(monkeypatch):
