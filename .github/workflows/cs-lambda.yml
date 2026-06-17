@@ -25,25 +25,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ── Python ───────────────────────────────────────────────────────────────
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      # ── Python & uv ──────────────────────────────────────────────────────────
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
         with:
           python-version: "3.14"
-          allow-prereleases: true
 
       # ── Dependencies ─────────────────────────────────────────────────────────
-      # --only-binary :all: prevents execution of setup.py build scripts.
-      # --require-hashes enforces the pinned hashes in the lock file,
-      # ensuring reproducible installs and guarding against supply-chain attacks.
+      # uv sync installs exactly the versions pinned in uv.lock (with hash
+      # verification), preventing both loose version resolution and setup
+      # script execution.
       - name: Install dependencies
-        run: "pip install --only-binary :all: --require-hashes -r requirements-dev.lock"
+        run: uv sync --extra dev
 
       # ── Tests & Coverage ─────────────────────────────────────────────────────
       # pytest-cov writes coverage.xml (configured in pyproject.toml).
       # The XML report is consumed by the SonarCloud step below.
       - name: Run tests
-        run: pytest
+        run: uv run pytest
 
       - name: Upload coverage report on failure
         if: failure()
